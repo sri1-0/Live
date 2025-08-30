@@ -1,18 +1,16 @@
-# Stage 1: Build the application
+# Stage 1: Build
 FROM openjdk:19-jdk AS build
 WORKDIR /app
 COPY pom.xml .
-COPY src ./src
-
-# Copy Maven wrapper and set permission
 COPY mvnw .
 COPY .mvn .mvn
+COPY src ./src
 RUN chmod +x ./mvnw
 RUN ./mvnw clean package -DskipTests
 
-# Stage 2: Create runtime image
+# Stage 2: Run
 FROM openjdk:19-jdk
 WORKDIR /app
-COPY --from=build /app/target/livelong-0.0.1-SNAPSHOT.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+COPY --from=build /app/target/*.jar app.jar
+ENTRYPOINT ["java","-jar","app.jar"]
 EXPOSE 8080
