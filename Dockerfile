@@ -13,6 +13,6 @@ RUN ./mvnw clean package -DskipTests
 # Stage 2: Create runtime image
 FROM openjdk:19-jdk
 WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
+COPY --from=build /app/target/livelong-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-jar","/app.jar"]
 EXPOSE 8080
